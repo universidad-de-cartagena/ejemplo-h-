@@ -1,6 +1,6 @@
 # Ejemplo java
 
-## Documentacion clave
+## Documentación clave
 
 [Quarkus](https://quarkus.io/guides/)
 
@@ -17,3 +17,20 @@ ObjectStore folder is created when running tests. Usually from `mvn package`. Mo
 By default maven-surefire-plugin creates test reports at `target/surefire-reports/*.xml`. To create coverage reports look into [JaCoCo](https://quarkus.io/guides/tests-with-coverage-guide#measuring-the-coverage-of-junit-tests-using-jacoco).
 
 To create a fat here look [here with native](https://www.baeldung.com/quarkus-io) and without native look [here](https://quarkus.io/guides/maven-tooling#uber-jar-maven).
+
+## Docker
+
+```shell
+java -Duser.timezone=UTC fat.jar
+```
+
+### Env
+
+QUARKUS_HTTP_PORT=9090
+QUARKUS_PROFILE=cloud
+
+## Draft
+
+[Adapt non-json like objects to json with JSONB using adapters](https://javaee.github.io/jsonb-spec/docs/user-guide.html#adapters)
+
+[Environment variables with quarkus](https://lordofthejars.github.io/quarkus-cheat-sheet/). It works because of [microprofile](https://github.com/eclipse/microprofile-config).
