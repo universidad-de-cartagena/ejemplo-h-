@@ -1,8 +1,10 @@
 package dev.amauryortega.controllers;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+import javax.inject.Inject;
 import javax.json.bind.Jsonb;
 import javax.json.bind.JsonbBuilder;
 import javax.json.bind.JsonbConfig;
@@ -17,6 +19,7 @@ import javax.ws.rs.core.MediaType;
 
 import dev.amauryortega.model.Note;
 import dev.amauryortega.model.NoteAdapter;
+import dev.amauryortega.services.BusinessLogic;;
 
 // Path can have a slash at the start but it is ignored by design
 // https://javaee.github.io/javaee-spec/javadocs/javax/ws/rs/Path.html
@@ -24,6 +27,8 @@ import dev.amauryortega.model.NoteAdapter;
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class NoteController {
+    @Inject
+    protected BusinessLogic businessService;
     private List<Note> db = new LinkedList<Note>();
     private JsonbConfig config;
     private Jsonb jsonb;
@@ -35,14 +40,16 @@ public class NoteController {
 
     @GET
     public String list() {
-        return jsonb.toJson(db);
+        ArrayList<Note> result = businessService.listNotes();
+        return jsonb.toJson(result);
     }
 
     @POST
     public String insert(String request) {
         Note note_to_insert = jsonb.fromJson(request, Note.class);
-        db.add(note_to_insert);
-        return jsonb.toJson(db.get(db.indexOf(note_to_insert)));
+        Note created_note = businessService.createNote(note_to_insert.title, note_to_insert.author,
+                note_to_insert.body);
+        return jsonb.toJson(created_note);
     }
 
     @DELETE
