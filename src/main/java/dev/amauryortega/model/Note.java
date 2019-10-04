@@ -37,6 +37,7 @@ public class Note {
     }
 
     public Note() {
+
     }
 
     public void setId(Long id) {
