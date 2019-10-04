@@ -15,7 +15,7 @@ public class NoteAdapter implements JsonbAdapter<Note, JsonObject> {
             .add("body", obj.body)
             .add("created_at", new SimpleDateFormat("YYYY-MM-dd'T'HH:mm:ss:S'Z'").format(obj.created_at))
             .add("title", obj.title)
-            .add("uuid", obj.uuid.toString())
+            .add("uuid", obj.uuid)
             .build();
     }
 

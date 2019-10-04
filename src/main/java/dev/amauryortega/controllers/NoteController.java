@@ -1,8 +1,6 @@
 package dev.amauryortega.controllers;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
 
 import javax.inject.Inject;
 import javax.json.bind.Jsonb;
@@ -29,7 +27,6 @@ import dev.amauryortega.services.BusinessLogic;;
 public class NoteController {
     @Inject
     protected BusinessLogic businessService;
-    private List<Note> db = new LinkedList<Note>();
     private JsonbConfig config;
     private Jsonb jsonb;
 
@@ -55,14 +52,13 @@ public class NoteController {
     @DELETE
     @Path("{uuid}")
     public String delete(@PathParam("uuid") String uuid) {
-        db.remove(db.get(db.size() - 1));
+        businessService.deleteNote(uuid);
         return "{\"message\": \"" + uuid + " Deleted\"}";
     }
 
     @GET
     @Path("{uuid}")
     public String get(@PathParam("uuid") String uuid) {
-        db.get(db.size() - 1);
-        return "{\"message\": \"" + uuid + " obtained\"}";
+        return jsonb.toJson(businessService.getNote(uuid));
     }
 }

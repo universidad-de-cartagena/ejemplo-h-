@@ -18,7 +18,7 @@ public class Note {
     public Long id;
     @NotNull
     @Column(unique = true)
-    public UUID uuid;
+    public String uuid;
     @NotNull
     public String title;
     @NotNull
@@ -33,7 +33,7 @@ public class Note {
         this.author = author;
         this.body = body;
         this.created_at = new Date();
-        this.uuid = UUID.randomUUID();
+        this.uuid = UUID.randomUUID().toString();
     }
 
     public Note() {
@@ -43,7 +43,8 @@ public class Note {
         this.id = id;
     }
 
-    public void setUuid(UUID uuid) {
+    public void setUuid(String uuid) {
+        UUID.fromString(uuid);
         this.uuid = uuid;
     }
 
