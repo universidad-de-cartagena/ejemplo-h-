@@ -55,7 +55,7 @@ public class NoteController {
     @Path("{uuid}")
     public Response delete(@PathParam("uuid") String uuid) {
         businessService.deleteNote(uuid);
-        String message = "{\"message\": \"" + uuid + " Deleted\"}";
+        String message = "{\"message\": \"Note with UUID: " + uuid + " has been deleted\"}";
         return Response.status(Status.OK).entity(message).build();
     }
 

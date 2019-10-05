@@ -38,3 +38,9 @@ QUARKUS_PROFILE=cloud
 [HTML report](https://maven.apache.org/surefire/maven-surefire-report-plugin/usage.html)
 
 [Quarkus cheat sheet](https://lordofthejars.github.io/quarkus-cheat-sheet/)
+
+See test reports on 8080
+
+```shell
+docker run --rm -it --init -v $PWD/target/surefire-reports/:/app:ro -w /app -p 8080:8080 node:10.16.3-alpine sh -c "npm install -g xunit-viewer && xunit-viewer --watch --results=/app/ --port=8080"
+```
