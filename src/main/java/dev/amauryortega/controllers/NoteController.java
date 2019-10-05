@@ -14,6 +14,8 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 
 import dev.amauryortega.model.Note;
 import dev.amauryortega.model.NoteAdapter;
@@ -36,29 +38,30 @@ public class NoteController {
     }
 
     @GET
-    public String list() {
+    public Response list() {
         ArrayList<Note> result = businessService.listNotes();
-        return jsonb.toJson(result);
+        return Response.status(Status.OK).entity(jsonb.toJson(result)).build();
     }
 
     @POST
-    public String insert(String request) {
+    public Response insert(String request) {
         Note note_to_insert = jsonb.fromJson(request, Note.class);
         Note created_note = businessService.createNote(note_to_insert.title, note_to_insert.author,
                 note_to_insert.body);
-        return jsonb.toJson(created_note);
+        return Response.status(Status.CREATED).entity(jsonb.toJson(created_note)).build();
     }
 
     @DELETE
     @Path("{uuid}")
-    public String delete(@PathParam("uuid") String uuid) {
+    public Response delete(@PathParam("uuid") String uuid) {
         businessService.deleteNote(uuid);
-        return "{\"message\": \"" + uuid + " Deleted\"}";
+        String message = "{\"message\": \"" + uuid + " Deleted\"}";
+        return Response.status(Status.OK).entity(message).build();
     }
 
     @GET
     @Path("{uuid}")
-    public String get(@PathParam("uuid") String uuid) {
-        return jsonb.toJson(businessService.getNote(uuid));
+    public Response get(@PathParam("uuid") String uuid) {
+        return Response.status(Status.OK).entity(jsonb.toJson(businessService.getNote(uuid))).build();
     }
 }
