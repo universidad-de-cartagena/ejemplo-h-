@@ -110,8 +110,7 @@ public class NotesIntegrationTest {
         when().
             delete("/notes").
         then().assertThat().
-            statusCode(400).
-            body("message", equalTo("Provide the UUID of the note that wants to be deleted"));
+            statusCode(405);
     }
 
     @Test
@@ -133,7 +132,6 @@ public class NotesIntegrationTest {
         when().
             patch("/notes").
         then().assertThat().
-            statusCode(415).
-            body("message", equalTo("Use one of the accepted HTTP methods ['GET', 'POST', 'DELETE']"));
+            statusCode(405);
     }
 }

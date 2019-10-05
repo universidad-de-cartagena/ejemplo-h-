@@ -6,6 +6,7 @@ import javax.inject.Inject;
 import javax.json.bind.Jsonb;
 import javax.json.bind.JsonbBuilder;
 import javax.json.bind.JsonbConfig;
+import javax.persistence.NoResultException;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -54,14 +55,25 @@ public class NoteController {
     @DELETE
     @Path("{uuid}")
     public Response delete(@PathParam("uuid") String uuid) {
-        businessService.deleteNote(uuid);
         String message = "{\"message\": \"Note with UUID: " + uuid + " has been deleted\"}";
+        try {
+            businessService.deleteNote(uuid);
+        } catch (NoResultException e) {
+            message = "{\"message\": \"No note was found with UUID: " + uuid + "\"}";
+            return Response.status(Status.NOT_FOUND).entity(message).build();
+        }
         return Response.status(Status.OK).entity(message).build();
     }
 
     @GET
     @Path("{uuid}")
     public Response get(@PathParam("uuid") String uuid) {
-        return Response.status(Status.OK).entity(jsonb.toJson(businessService.getNote(uuid))).build();
+        Note found_note;
+        try {
+            found_note = businessService.getNote(uuid);
+        } catch (NoResultException e) {
+            return Response.status(Status.NOT_FOUND).entity("{\"message\": \"No note was found with UUID: " + uuid + "\"}").build();
+        }
+        return Response.status(Status.OK).entity(jsonb.toJson(found_note)).build();
     }
 }
