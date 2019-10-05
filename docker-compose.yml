@@ -1,6 +1,11 @@
 version: '3.4'
 
 services:
+  app:
+    image: equipo01-backend-java:latest
+    build: .
+    ports:
+      - "8080:8080"
   database:
     image: mariadb:10.4.7-bionic
     ports:
