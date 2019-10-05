@@ -36,3 +36,5 @@ QUARKUS_PROFILE=cloud
 [Environment variables with quarkus](https://lordofthejars.github.io/quarkus-cheat-sheet/). It works because of [microprofile](https://github.com/eclipse/microprofile-config).
 
 [HTML report](https://maven.apache.org/surefire/maven-surefire-report-plugin/usage.html)
+
+[Quarkus cheat sheet](https://lordofthejars.github.io/quarkus-cheat-sheet/)
