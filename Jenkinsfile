@@ -33,9 +33,9 @@ pipeline {
     }
     stage('Tests') {
       steps {
-        sh 'docker-compose -f docker-compose.tests.yml up'
+        sh 'docker-compose -f docker-compose.test.yml up'
         junit(testResults: 'reports/*.xml', allowEmptyResults: true)
-        sh 'docker-compose down -v --remove-orphans'
+        sh 'docker-compose -f docker-compose.test.yml down -v --remove-orphans'
         sh 'docker system prune --volumes --force'
       }
     }
