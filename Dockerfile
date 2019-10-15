@@ -6,7 +6,7 @@ COPY pom.xml .
 COPY mvnw .
 COPY src/ src/
 RUN chmod +x mvnw \
-    && ./mvnw clean package -DskipTests
+    && ./mvnw clean package -DskipTests --batch-mode
 
 FROM openjdk:8u222-jre-slim-buster
 

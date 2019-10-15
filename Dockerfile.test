@@ -9,4 +9,4 @@ RUN chmod +x mvnw
 
 ENV APP_UID=1000 APP_GID=1000
 
-CMD ./mvnw clean test && chown -R $APP_UID:$APP_GID target/
+CMD ./mvnw clean test --batch-mode && chown -R $APP_UID:$APP_GID target/
