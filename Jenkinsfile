@@ -17,7 +17,7 @@ pipeline {
     stage('Build image') {
       post {
         success {
-          sh 'echo -n $DOCKERHUB_PSW | docker login --username $DOCKERHUB_USR --password-stdin'
+          sh 'docker login --username $DOCKERHUB_USR --password $DOCKERHUB_PSW'
           sh 'docker tag equipo01-backend-java:latest $DOCKERHUB_USR/equipo01-backend-java:latest'
           sh 'docker push $DOCKERHUB_USR/equipo01-backend-java:latest'
         }
