@@ -17,9 +17,11 @@ pipeline {
     stage('Build image') {
       post {
         success {
+          sh 'sudo apt-get remove golang-docker-credential-helpers -y -q'
           sh 'docker login --username $DOCKERHUB_USR --password $DOCKERHUB_PSW'
           sh 'docker tag equipo01-backend-java:latest $DOCKERHUB_USR/equipo01-backend-java:latest'
           sh 'docker push $DOCKERHUB_USR/equipo01-backend-java:latest'
+          sh 'sudo apt-get install docker-compose -y -q'
         }
         failure {
           sh 'docker system prune --volumes --force || true'
