@@ -1,0 +1,12 @@
+FROM openjdk:8-slim-buster
+
+WORKDIR /app
+COPY .mvn/ .mvn/
+COPY pom.xml .
+COPY mvnw .
+COPY src/ src/
+RUN chmod +x mvnw
+
+ENV APP_UID=1000 APP_GID=1000
+
+CMD ./mvnw clean test && chown -R $APP_UID:$APP_GID target/

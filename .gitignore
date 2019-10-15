@@ -36,3 +36,4 @@ release.properties
 
 # Junit tests
 ObjectStore/
+reports/
