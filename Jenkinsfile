@@ -14,7 +14,7 @@ pipeline {
       }
     }
     stage('Crear de imagen Docker') {
-       steps {
+      steps {
         sh 'docker-compose build --force-rm'
       }
       post {
