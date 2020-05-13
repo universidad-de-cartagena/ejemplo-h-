@@ -6,29 +6,21 @@ pipeline {
     DOCKERHUB = credentials('jenkinsudc-dockerhub-account')
   }
   stages {
-    stage('Kill everything') {
+    stage('Limpiar elementos Docker huerfanos') {
       steps {
-        sh 'docker-compose down -v --remove-orphans || true'
-        sh 'docker container kill $(docker ps -a -q) || true'
-        sh 'docker rmi --force $(docker images -a -q) || true'
-        sh 'docker system prune --volumes --force || true'
+        sh 'docker container prune --force || true'
+        sh 'docker volume prune --force || true'
+        sh 'docker image prune -f'
       }
     }
-    stage('Build image') {
-      post {
-        success {
-          sh 'sudo apt-get remove golang-docker-credential-helpers -y -q'
-          sh 'docker login --username $DOCKERHUB_USR --password $DOCKERHUB_PSW'
-          sh 'docker tag equipo01-backend-java:latest $DOCKERHUB_USR/equipo01-backend-java:latest'
-          sh 'docker push $DOCKERHUB_USR/equipo01-backend-java:latest'
-          sh 'sudo apt-get install docker-compose -y -q'
-        }
-        failure {
-          sh 'docker system prune --volumes --force || true'
-        }
+    stage('Crear de imagen Docker') {
+       steps {
+        sh 'docker-compose build --force-rm'
       }
-      steps {
-        sh 'docker-compose build'
+      post {
+        failure {
+          sh 'docker image prune -f'
+        }
       }
     }
     stage('Tests') {
@@ -37,15 +29,33 @@ pipeline {
         junit(testResults: 'reports/*.xml', allowEmptyResults: true)
         sh 'docker-compose -f docker-compose.test.yml down -v --remove-orphans'
         sh 'docker system prune --volumes --force'
-      }
     }
-    stage('Deploy') {
+    stage('Publicar imagen Docker') {
+      when {
+          branch 'master'
+      }
+      steps {
+          sh 'docker login --username $DOCKERHUB_USR --password $DOCKERHUB_PSW'
+          sh 'docker tag equipo01-backend-java:latest $DOCKERHUB_USR/equipo01-backend-java:latest'
+          sh 'docker push $DOCKERHUB_USR/equipo01-backend-java:latest'
+          sh 'sudo apt-get install docker-compose -y -q'
+      }
       post {
         failure {
-          echo 'A execution failed'
-          sh 'docker-compose down -v --remove-orphans || true'
           sh 'docker system prune --volumes --force || true'
-          sh 'docker rmi --force $(docker images --quiet)'
+        }
+      }
+    }
+    }
+    stage('Deploy') {
+      when {
+          branch 'master'
+      }
+      post {
+        failure {
+          sh 'docker container prune --force || true'
+          sh 'docker volume prune --force || true'
+          sh 'docker image prune -f'
         }
       }
       steps {
