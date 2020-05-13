@@ -29,6 +29,7 @@ pipeline {
         junit(testResults: 'reports/*.xml', allowEmptyResults: true)
         sh 'docker-compose -f docker-compose.test.yml down -v --remove-orphans'
         sh 'docker system prune --volumes --force'
+      }
     }
     stage('Publicar imagen Docker') {
       when {
@@ -45,7 +46,6 @@ pipeline {
           sh 'docker system prune --volumes --force || true'
         }
       }
-    }
     }
     stage('Deploy') {
       when {
