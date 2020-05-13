@@ -13,7 +13,7 @@ pipeline {
         sh 'docker image prune -f'
       }
     }
-    stage('Crear de imagen Docker') {
+    stage('Crear imagen Docker') {
       steps {
         sh 'docker-compose build --force-rm'
       }
